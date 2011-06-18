@@ -26,17 +26,18 @@
 -(void)setDelegate:(MainViewController *)del
 {
     delegate = del;
-    
+    accswitch.on = self.delegate.sendAcc;
+    touchswitch.on = self.delegate.sendTouch;
+    groupswitch.on = self.delegate.groupPackets;
+    hostfield.text = self.delegate.host;
+    portfield.text = self.delegate.port;
+    freqfield.text = [NSString stringWithFormat:@"%d",(int)round(1.0f/([UIAccelerometer sharedAccelerometer].updateInterval))];
 }
 
 - (void)didReceiveMemoryWarning
 {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    accswitch.on = self.delegate.sendAcc;
-    touchswitch.on = self.delegate.sendTouch;
-    hostfield.text = self.delegate.host;
-    portfield.text = self.delegate.port;
     // Release any cached data, images, etc. that aren't in use.
 }
 
@@ -47,9 +48,16 @@
     [super viewDidLoad];
     accswitch.on = self.delegate.sendAcc;
     touchswitch.on = self.delegate.sendTouch;
+    groupswitch.on = self.delegate.groupPackets;
     hostfield.text = self.delegate.host;
     portfield.text = self.delegate.port;
+    freqfield.text = [NSString stringWithFormat:@"%d",(int)round(1.0f/([UIAccelerometer sharedAccelerometer].updateInterval))];
     self.view.backgroundColor = [UIColor viewFlipsideBackgroundColor];  
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return NO;
 }
 
 - (IBAction)settingsChanged:(id)sender
@@ -62,6 +70,14 @@
         self.delegate.sendAcc = accswitch.on;
     if (sender == touchswitch)
         self.delegate.sendTouch = touchswitch.on;
+    if (sender == groupswitch)
+        self.delegate.groupPackets = groupswitch.on;
+    if (sender == freqfield)
+    {
+        if ([freqfield.text intValue])
+            [UIAccelerometer sharedAccelerometer].updateInterval = 1.0f/[freqfield.text intValue];
+        freqfield.text = [NSString stringWithFormat:@"%d",(int)round(1.0f/([UIAccelerometer sharedAccelerometer].updateInterval))];
+    }
 }
 
 - (void)viewDidUnload

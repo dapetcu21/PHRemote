@@ -10,9 +10,9 @@
 
 @class MainViewController;
 
-@interface FlipsideViewController : UIViewController {
-    IBOutlet UITextField * hostfield,*portfield;
-    IBOutlet UISwitch * accswitch,*touchswitch;
+@interface FlipsideViewController : UIViewController<UITextFieldDelegate> {
+    IBOutlet UITextField * hostfield,*portfield,*freqfield;
+    IBOutlet UISwitch * accswitch,*touchswitch,*groupswitch;
     MainViewController * delegate;
 }
 

@@ -12,11 +12,13 @@
 @implementation MainViewController
 @synthesize sendAcc;
 @synthesize sendTouch;
+@synthesize groupPackets;
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
     [[UIAccelerometer sharedAccelerometer] setDelegate:self];
+    [UIAccelerometer sharedAccelerometer].updateInterval=1.0f/15;
     [super viewDidLoad];
     self.port = @"2221";
     self.host = @"255.255.255.255";
@@ -27,52 +29,93 @@
 
 - (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration
 {
-    if (!sendAcc) return;
+    if (!sendAcc && (!sendTouch || queue.empty())) return;
     remote.beginPacket(0xAC);
-    int64_t acc[3];
-    acc[0] = (int64_t)([acceleration x]*1048576); //this is ugly
-    acc[1] = (int64_t)([acceleration y]*1048576);
-    acc[2] = (int64_t)([acceleration z]*1048576);
-    URField field;
-    field.setTag(0x01);
-    field.setInt64s((uint64_t*)acc, 3);
-    remote.addField(field);
+    URField accfield;
+    if (sendAcc && acceleration)
+    {
+        int64_t acc[3];
+        acc[0] = (int64_t)([acceleration x]*1048576); //this is ugly
+        acc[1] = (int64_t)([acceleration y]*1048576);
+        acc[2] = (int64_t)([acceleration z]*1048576);
+        accfield.setTag(0x01);
+        accfield.setInt64s((uint64_t*)acc, 3);
+        remote.addField(accfield);
+    }
+    
+    URField * x = NULL;
+    URField * y = NULL;
+    URField * ide = NULL;
+    URField * phase = NULL;
+    
+    if (sendTouch && !queue.empty())
+    {
+        URField send;
+        send.setTag(0x08);
+        URField wi;
+        wi.setTag(0x06);
+        wi.setInt32(self.view.bounds.size.width);
+        remote.addField(wi);
+        URField he;
+        he.setTag(0x07);
+        he.setInt32(self.view.bounds.size.height);
+        remote.addField(he);
+        
+        int n = queue.size();
+        
+        x = new URField[n];
+        y = new URField[n];
+        ide = new URField[n];
+        phase = new URField[n];
+        
+        for(int i=0; i<n; i++)
+        {
+            touch t = queue.front();
+            queue.pop_front();
+            
+            ide[i].setTag(0x02);
+            ide[i].setInt32((uint32_t)t.id);
+            remote.addField(ide[i]);
+            
+            phase[i].setTag(0x03);
+            phase[i].setInt8((uint8_t)t.state);
+            remote.addField(phase[i]);
+            
+            x[i].setInt32(t.x);
+            x[i].setTag(0x04);
+            remote.addField(x[i]);
+            
+            y[i].setInt32(t.y);
+            y[i].setTag(0x05);
+            remote.addField(y[i]);
+            
+            remote.addField(send);
+            
+        }
+        
+    }
+    
     status.text = @"";
     try {remote.endPacket(0);}
     catch (std::string ex) {status.text = [NSString stringWithUTF8String:ex.c_str()];};
+    
+    delete[] x;
+    delete[] y;
+    delete[] ide;
+    delete[] phase;
 }
 
-- (void)sendTouchPack:(int)ph withTouch:(UITouch*)touch inView:(UIView*)view
+- (void)sendTouchPack:(int)ph withTouch:(UITouch*)tt inView:(UIView*)view
 {
     if (!sendTouch) return;
-    remote.beginPacket(0xAB);
-    URField pid;
-    pid.setTag(0x01);
-    pid.setInt32((uint32_t)touch);
-    remote.addField(pid);
-    URField phase;
-    phase.setTag(0x02);
-    phase.setInt8((uint8_t)ph);
-    remote.addField(phase);
-    URField px;
-    px.setInt32([touch locationInView:view].x);
-    px.setTag(0x03);
-    remote.addField(px);
-    URField py;
-    py.setInt32([touch locationInView:view].y);
-    py.setTag(0x04);
-    remote.addField(py);
-    URField lx;
-    lx.setInt32(view.bounds.size.width);
-    lx.setTag(0x05);
-    remote.addField(py);
-    URField ly;
-    ly.setInt32(view.bounds.size.height);
-    ly.setTag(0x06);
-    remote.addField(ly);
-    status.text = @"";
-    try {remote.endPacket(0);}
-    catch (std::string ex) {status.text = [NSString stringWithUTF8String:ex.c_str()];};
+    touch t;
+    t.state = ph;
+    t.id = (void*)tt;
+    t.x = [tt locationInView:view].x;
+    t.y = [tt locationInView:view].y;
+    queue.push_back(t);
+    if (!groupPackets)
+        [self accelerometer:nil didAccelerate:nil];
 }
 
 - (void)start
