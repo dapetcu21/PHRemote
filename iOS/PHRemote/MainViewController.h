@@ -27,5 +27,6 @@
 @property(nonatomic,assign) BOOL sendTouch;
 
 - (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller;
+- (void)sendTouchPack:(int)phase withTouch:(UITouch*)touch inView:(UIView*)view;
 
 @end

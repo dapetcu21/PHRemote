@@ -37,7 +37,42 @@
     field.setTag(0x01);
     field.setInt64s((uint64_t*)acc, 3);
     remote.addField(field);
-    remote.endPacket(0);
+    status.text = @"";
+    try {remote.endPacket(0);}
+    catch (std::string ex) {status.text = [NSString stringWithUTF8String:ex.c_str()];};
+}
+
+- (void)sendTouchPack:(int)ph withTouch:(UITouch*)touch inView:(UIView*)view
+{
+    if (!sendTouch) return;
+    remote.beginPacket(0xAB);
+    URField pid;
+    pid.setTag(0x01);
+    pid.setInt32((uint32_t)touch);
+    remote.addField(pid);
+    URField phase;
+    phase.setTag(0x02);
+    phase.setInt8((uint8_t)ph);
+    remote.addField(phase);
+    URField px;
+    px.setInt32([touch locationInView:view].x);
+    px.setTag(0x03);
+    remote.addField(px);
+    URField py;
+    py.setInt32([touch locationInView:view].y);
+    py.setTag(0x04);
+    remote.addField(py);
+    URField lx;
+    lx.setInt32(view.bounds.size.width);
+    lx.setTag(0x05);
+    remote.addField(py);
+    URField ly;
+    ly.setInt32(view.bounds.size.height);
+    ly.setTag(0x06);
+    remote.addField(ly);
+    status.text = @"";
+    try {remote.endPacket(0);}
+    catch (std::string ex) {status.text = [NSString stringWithUTF8String:ex.c_str()];};
 }
 
 - (void)start

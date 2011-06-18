@@ -21,6 +21,7 @@
 		C13E6BF113ABF1B000365340 /* URClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C13E6BEE13ABF1B000365340 /* URClient.cpp */; };
 		C13E6BF213ABF1B000365340 /* URCommon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C13E6BEF13ABF1B000365340 /* URCommon.cpp */; };
 		C13E6BF313ABF1B000365340 /* URField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C13E6BF013ABF1B000365340 /* URField.cpp */; };
+		C13E6BFA13AC1CC200365340 /* CaptureView.mm in Sources */ = {isa = PBXBuildFile; fileRef = C13E6BF913AC1CC200365340 /* CaptureView.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,8 @@
 		C13E6BF513ABF1F300365340 /* URCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = URCommon.h; path = ../uremote/include/URCommon.h; sourceTree = "<group>"; };
 		C13E6BF613ABF1F300365340 /* URCommonPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = URCommonPrivate.h; path = ../uremote/include/URCommonPrivate.h; sourceTree = "<group>"; };
 		C13E6BF713ABF1F300365340 /* URField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = URField.h; path = ../uremote/include/URField.h; sourceTree = "<group>"; };
+		C13E6BF813AC1CC100365340 /* CaptureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureView.h; sourceTree = "<group>"; };
+		C13E6BF913AC1CC200365340 /* CaptureView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CaptureView.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +107,8 @@
 				C13E6BDA13ABB6AF00365340 /* FlipsideViewController.h */,
 				C13E6BDB13ABB6AF00365340 /* FlipsideViewController.mm */,
 				C13E6BDD13ABB6AF00365340 /* FlipsideView.xib */,
+				C13E6BF813AC1CC100365340 /* CaptureView.h */,
+				C13E6BF913AC1CC200365340 /* CaptureView.mm */,
 				C13E6BC713ABB6AE00365340 /* Supporting Files */,
 			);
 			path = PHRemote;
@@ -205,6 +210,7 @@
 				C13E6BF113ABF1B000365340 /* URClient.cpp in Sources */,
 				C13E6BF213ABF1B000365340 /* URCommon.cpp in Sources */,
 				C13E6BF313ABF1B000365340 /* URField.cpp in Sources */,
+				C13E6BFA13AC1CC200365340 /* CaptureView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
