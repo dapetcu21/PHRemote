@@ -5,5 +5,7 @@ xcuserdata
 *.xcworkspace
 *.o
 *.lo
+*.swp
+bin
 
 .DS_Store
