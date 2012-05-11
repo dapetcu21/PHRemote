@@ -64,4 +64,4 @@ public:
 		 endPacket(flags,NULL,0); }
 };
 
-#endif URCLIENT_H
+#endif

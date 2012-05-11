@@ -19,7 +19,8 @@
 
 #include <string>
 
-#ifdef _MSC_VER //stupid microsoft
+#ifdef _MSC_VER 
+//stupid microsoft
 typedef __int8 int8_t;
 typedef unsigned __int8 uint8_t;
 typedef __int16 int16_t;
@@ -40,4 +41,4 @@ typedef unsigned __int64 uint64_t;
 	typedef int ursock_t;
 #endif
 
-#endif URCOMMON_H
+#endif

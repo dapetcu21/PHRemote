@@ -50,6 +50,8 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <string.h>
+#include <stdlib.h>
 
 #define BAD_SOCK -1
 #define ERRNO errno
