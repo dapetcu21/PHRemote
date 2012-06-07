@@ -1,10 +1,4 @@
-//
-//  CaptureView.m
-//  PHRemote
-//
-//  Created by Marius Petcu on 6/18/11.
-//  Copyright 2011 Porkholt Labs!. All rights reserved.
-//
+/* Copyright (c) Marius Petcu, Porkholt Labs!. All rights reserved. */
 
 #import "CaptureView.h"
 #import "MainViewController.h"
