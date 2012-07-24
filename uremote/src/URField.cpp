@@ -21,7 +21,7 @@
 #ifdef __BIG_ENDIAN__
 	#define htonll(x) (x)
 #else
-	#ifdef __GNUC__
+    #if defined(__GNUC__) && (__GNUC__ >= 4) && (__GNUC_MINOR__ >= 3)
 		#define htonll __builtin_bswap64
 	#elif _MSC_VER
 		#define htonll _byteswap_uint64
