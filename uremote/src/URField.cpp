@@ -18,22 +18,24 @@
 #include "URCommonPrivate.h"
 
 
-#ifdef __BIG_ENDIAN__
-	#define htonll(x) (x)
-#else
-    #if defined(__GNUC__) && (__GNUC__ >= 4) && (__GNUC_MINOR__ >= 3)
-		#define htonll __builtin_bswap64
-	#elif _MSC_VER
-		#define htonll _byteswap_uint64
-	#else
-		inline uint64_t htonll(uint64_t x) //this is really crappy
-		{
-			return htonl(x>>32) | ((uint64_t)htonl(x&0xFFFFFFFF)<<32);
-		}
-	#endif
-#endif
+#ifndef htonll
+    #ifdef __BIG_ENDIAN__
+        #define htonll(x) (x)
+    #else
+        #if defined(__GNUC__) && (__GNUC__ >= 4) && (__GNUC_MINOR__ >= 3)
+            #define htonll __builtin_bswap64
+        #elif _MSC_VER
+            #define htonll _byteswap_uint64
+        #else
+            inline uint64_t htonll(uint64_t x) //this is really crappy
+            {
+                return htonl(x>>32) | ((uint64_t)htonl(x&0xFFFFFFFF)<<32);
+            }
+        #endif
+    #endif
 
-#define ntohll htonll
+    #define ntohll htonll
+#endif
 
 URField::URField(): dt(NULL), len(0), manageMem(false), _tag(0x00), knwnLength(false) {}
 
